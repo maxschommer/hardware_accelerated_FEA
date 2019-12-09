@@ -1,6 +1,7 @@
-`define WR_PROTECT 3'd0
-`define SET_NODE 3'd1
-`define SET_POS  3'd2
+`define WR_PROTECT  3'd0
+`define SET_NODE    3'd1
+`define SET_POS     3'd2
+`define RUN         3'd3
 
 
 module node
@@ -40,6 +41,8 @@ module node
     end
 
     always @(posedge clk) begin
+        // $display("Abs DX", abs_dx);
+        // $display("Time Spatial Const", time_spatial_const);
         case (command)
             `SET_NODE:  begin   node_val_reg <= set_val; end
             `SET_POS:   begin   node_pos_reg <= set_val; end
@@ -52,10 +55,12 @@ module node
     // supported, but implementation of the convolution will need
     // to be modified. 
     always @* begin
-        time_spatial_const <= kval*dt/(dx*dx);
+        time_spatial_const <= kval*dt;
     end
 
     always @(posedge clk) begin
-        node_val_reg <= time_spatial_const*(input1 - 2*nodeval + input2);
+        case (command)
+            `RUN: begin node_val_reg <= node_val_reg +  time_spatial_const*(input1 - 2*node_val_reg + input2)/(dx*dx); end
+        endcase
     end
 endmodule

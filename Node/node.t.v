@@ -18,7 +18,7 @@ module node_test ();
 
 	reg [31:0] posx1, posx2, posx3;
 
-	wire[31:0] posx1_1, posx1_3;
+	reg[31:0] posx1_1, posx1_3;
 	wire[31:0] nodeval1, nodeval2, nodeval3;
 	wire[31:0] posx_1_val;
 
@@ -28,8 +28,8 @@ module node_test ();
 			.set_val 	(set_val),
 			.input1 	(left_endpt),
 			.posx1  	(posx1_1),
-			.input2 	(nodeval2),
-			.posx2  	(posx2), // Position of middle node
+			.input2 	(right_endpt),
+			.posx2  	(posx1_3), // Position of middle node
 			.kval   	(kval),
 			.dt     	(dt),
 			.command 	(command),
@@ -69,9 +69,76 @@ module node_test ();
 	      $dumpvars();
 	    `endif
 
-	    command = `SET_NODE; set_val = 32'd0; 
+	    command = `SET_NODE; set_val = 32'd1000; 
 	    @(posedge clk); #1 
 	    $display("Node Value: ", nodeval1);
+
+	   	command = `SET_POS; set_val = 32'd100; 
+	    @(posedge clk); #1 
+	    $display("Node Position: ", posx_1_val);
+
+		posx1_1 = 32'd0; posx1_3 = 32'd200;
+		kval = 32'd100; dt = 32'd10;
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+		
+		command = `RUN; left_endpt = 32'd1000; right_endpt = 32'd3000;
+		$display("Running Simulation");
+		$display("Left Endpoint: ",left_endpt, ", Right Endpoint: ", right_endpt, ", Node Value: ", nodeval1);
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
+		@(posedge clk); #1 
+		$display("Node Value: ", nodeval1);
+
 
 
 	    #1 $finish();
