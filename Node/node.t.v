@@ -9,36 +9,44 @@
 
 
 module node_test ();
+	reg [31:0] left_endpt;
+	reg [31:0] right_endpt;
+	reg [31:0] dt, kval;
+	reg clk;
+
+	reg [31:0] posx1, posx2, posx3;
+
+	wire[31:0] posx1_1, posx1_3;
 
 	// Left, first node
 	node DUT1(.nodeval 	(nodeval1),
-			.nodepos 	(nodepos1),
-			.input1 	(input1),
-			.posx1  	(posx1),
-			.input2 	(input2),
-			.posx2  	(posx2),
+			.nodepos 	(posx1),
+			.input1 	(left_endpt),
+			.posx1  	(posx1_1),
+			.input2 	(nodeval2),
+			.posx2  	(posx2), // Position of middle node
 			.kval   	(kval),
 			.dt     	(dt),
 			.clk    	(clk));
 
 	// Middle node
 	node DUT2(.nodeval 	(nodeval2),
-			.nodepos 	(nodepos2),
-			.input1 	(input1),
+			.nodepos 	(posx2),
+			.input1 	(nodeval1), 
 			.posx1  	(posx1),
-			.input2 	(input2),
-			.posx2  	(posx2),
+			.input2 	(nodeval3),
+			.posx2  	(posx3),
 			.kval   	(kval),
 			.dt     	(dt),
 			.clk    	(clk));
 
 	// Right, last node
 	node DUT3(.nodeval 	(nodeval3),
-			.nodepos 	(nodepos3),
-			.input1 	(input1),
-			.posx1  	(posx1),
-			.input2 	(input2),
-			.posx2  	(posx2),
+			.nodepos 	(posx3),
+			.input1 	(nodeval2),  // 
+			.posx1  	(posx2), // Position of node to the left
+			.input2 	(right_endpt), // The right boundary
+			.posx2  	(posx1_3),
 			.kval   	(kval),
 			.dt     	(dt),
 			.clk    	(clk));
