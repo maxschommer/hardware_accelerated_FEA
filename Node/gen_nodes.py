@@ -1,16 +1,18 @@
 import sys
+import numpy as np
 
-num_gen = 5
+num_gen = 20
 
 l_val = 1000
 r_val = 3000
 l_pos = 0
 r_pos = 10000
 dt = 100
+dx = int(1000)
 
-k = 1000
+k = 4000
 
-node_pos = [1000, 2000, 3000, 4000, 5000]
+node_pos = np.arange(1, num_gen + 1)*dx
 
 runsteps = 100
 
@@ -141,11 +143,17 @@ indent2([
     "@(posedge clk); #1;",
     "command = `RUN;"
 ])
-
 for i in range(runsteps):
     print("        @(posedge clk); #1;")
+    str_prpnd = ""
+    if i == 0:
+        str_prpnd = "t_profile = ["
 
-    print("        $display(\"Node Value: %d %d %d %d %d\"",end="")
+    str_end = ","
+    if i == runsteps-1:
+        str_end = "]"
+    num_fmt_str = ("%d,"*num_gen)[:-1]
+    print("        $display(\"{}[{}]{}\"".format(str_prpnd, num_fmt_str, str_end),end="")
     for i in range(num_gen):
         print(f", nodeval{i}", end="")
     print(");")
