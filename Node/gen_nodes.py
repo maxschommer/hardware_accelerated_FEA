@@ -1,17 +1,18 @@
 import sys
 
-num_gen = 1
+num_gen = 5
 
 l_val = 1000
 r_val = 3000
 l_pos = 0
-r_pos = 20
-dt = 10
-k = 100
+r_pos = 10000
+dt = 100
 
-node_pos = [10]
+k = 1000
 
-runsteps = 10
+node_pos = [1000, 2000, 3000, 4000, 5000]
+
+runsteps = 100
 
 print(
     "`include \"node.v\"\n" +
@@ -58,6 +59,7 @@ for i in range(num_gen):
                 f".posx2 (input_right),"+
                 f".kval (kval),"+
                 f".dt (dt),"+
+                f".command(command),"+
                 f".clk (clk)"+
                 f");"
                 ])
@@ -72,6 +74,7 @@ for i in range(num_gen):
                 f".posx2 (posx{i+1}),"+
                 f".kval (kval),"+
                 f".dt (dt),"+
+                f".command(command),"+
                 f".clk (clk)"+
                 f");"
                 ])
@@ -86,6 +89,7 @@ for i in range(num_gen):
                 f".posx2 (input_right),"+
                 f".kval (kval),"+
                 f".dt (dt),"+
+                f".command(command),"+
                 f".clk (clk)"+
                 f");"
                 ])
@@ -100,6 +104,7 @@ for i in range(num_gen):
                 f".posx2 (posx{i+1}),"+
                 f".kval (kval),"+
                 f".dt (dt),"+
+                f".command(command),"+
                 f".clk (clk)"+
                 f");"
                 ])
@@ -140,7 +145,7 @@ indent2([
 for i in range(runsteps):
     print("        @(posedge clk); #1;")
 
-    print("        $display(\"Node Value: \"",end="")
+    print("        $display(\"Node Value: %d %d %d %d %d\"",end="")
     for i in range(num_gen):
         print(f", nodeval{i}", end="")
     print(");")
