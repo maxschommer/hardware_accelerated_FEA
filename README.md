@@ -8,4 +8,7 @@ Our goal is to perform analysis on a part in a few hundred or thousand clock cyc
 
 ## Architectural Description
 
-FEA generally operates on a mesh of the part. This mesh can be one, two or three dimensional depending on the type of problem being analyzed. A mesh consists of a series of nodes with edges in between them designating connections to other nodes. Most algorithms comprise of applying some function on each node which is dependent on the values of the surrounding nodes and it's own value. In order to model this, our architecture is based on a series of nodes as well which perform these computations. Each node is capable of connecting to other nodes, and thus simulating any mesh connection. The nodes contain registers which model external 
+![Mesh](Media/meshExample.png)
+An example of a 3 dimensional mesh at various resolutions. Note that the mesh consists of nodes (the dots) connected by edges (the lines). 
+
+FEA generally operates on a mesh of the part. This mesh can be one, two or three dimensional depending on the type of problem being analyzed. A mesh consists of a series of nodes with edges in between them designating connections to other nodes. Most algorithms comprise of applying some function on each node which is dependent on the values of the surrounding nodes and it's own value. In order to model this, our architecture is based on a series of nodes as well which perform these computations. Each node is capable of connecting to other nodes through a technique we will describe later, and thus simulate any mesh connection. The nodes contain registers which model external 
