@@ -36,3 +36,10 @@ Note that each T[t,j] relies on the nodes to the left, T[t,j-1], and right, T[t,
 We were able to successfuly simulate the 1 dimensional heat equation in verilog using this architecture. To compile, run and plot the simulation simply run `nodes_sol.sh` from the `/Nodes` directory. This should produce an animation similar to the following:
 
 ![Example Simulation of the 1 Dimensional Heat Equation Using Verilog](Media/exampleSim.gif)
+
+Unfortunately, one problem with this architecture is that it does not scale well. Imagine we have a two dimsensional mesh we would like to simulate. Each node might be connected to 3, 4, 5, or even 6 other nodes. The one dimensional architecture described has a fixed connection architecture, so it obviously wouldn't be able to generalize to these other cases. In order to generalize to solving more arbitrary meshes, we will describe a new architecture which we didn't implement yet but should allow for the scaling properties mentioned. 
+
+### Multi-Dimensional Architecture
+
+Since most siliocn processes are two dimensional (except for new "three dimensional" architectures which are in reality just layered planes with vias), then the best layout of nodes we can hope to achieve is a 2 dimensional grid. The question then becomes how we connect the nodes togeather in order to simulate any arbitrary 1, 2 or 3 dimensional mesh. There are many architectures to consider, most of which have serious scaling problems. For example, we might connect every node to every other node (a complete graph), and signal in a register which ones they're connected to. Unfortunately, this scales poorly as a 12 node network has 66 connections. Another way we could connect nodes is similar to the connection fabric of an FPGA. This typically involves connecting "blocks" by using separate router blocks permanently per upload. Unfortunately, we may need to connect a node to more than 4 other nodes, so this becomes a problem since each block can be connected to at most the 4 locations. 
+
