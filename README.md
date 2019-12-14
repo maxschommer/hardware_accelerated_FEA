@@ -56,3 +56,42 @@ We will assume that for most 3D meshes, which are the highest dimensional mesh w
 *Proposed connection fabric, which each node connected to the four surrounding nodes.*
 
 Additional registers are now needed for this new architecture. Notice that there is a T<sub>next</sub>, PassThroughDes, P<sub>y</sub>, and P<sub>z</sub>. The P<sub>y</sub> and P<sub>z</sub> are there to extend the problem to three dimensions. The T<sub>next</sub> is necessary since each time step will now take multiple clock cycles, and since the next value of each node depends on the current value of the node and surrounding nodes, then the next value needs to be stored indepenently of the current value. 
+
+![Example connection being made](Media/nodeConnectionConnected.png)
+
+*The nodes can then be connected through other nodes.*
+
+Now that we see that nodes can be connected through other nodes, let's discuss the method in which this is executed in order to map 3 dimensional meshes to this 2 dimensional grid network. Each node has what is called a Pass Through Destination register, PassThroughDes, which descibes it's connection behavior. This register contains several instructions per node, which are executed sequentially. Each instruction tells the node how to pass data through it, or how to connect to it's surrounding nodes. 
+
+![Pass through node labels](Media/nodeLabels.png)
+
+*Labels for each nodes, describing the directions of connections.*
+
+| Binary String  | Command Description |
+| --- | --- |
+| 0000 | Idle |
+| 0001 | 1<->2 |
+| 0010 | 2<->3 |
+| 0011 | 3<->4 |
+| 0100 | 4<->1 |
+| 0101 | 1<->3 |
+| 0110 | 2<->4 |
+| 0111 | Conn_1 |
+| 1000 | Conn_2 |
+| 1001 | Conn_3 |
+| 1010 | Conn_4 |
+
+The command `0001` denoted by `1<->2` describes passing the information from the node in position 1 to the node in position 2 and vice versa. The command `0111` connects the node to whatever information is present in the position 1. Each PassThroughDes register contains some number of instructions, which depends on the maximum degree of graph expected from whatever mesh is being mapped to the grid. For example, a high maximum degree will require many clock cycles and connection cycles to connect the vertex of maximum degree. The tradeoff is the more instructions that PassThroughDes contains, the longer each iteration of analysis takes. We estimate around 10 or 12 instructions should be necessary, but this should be investigated by data on meshes across various meshing algorithms. 
+
+![Example of a node connetion through another node](Media/passThroughExample.png)
+
+*Example of a node connection through another node. The upper left node is commanded `Conn_3` which connects it to the node beneath it. The bottom left node is commanded `1<->2` which passes through the sigals of the right and top nodes. The bottom right node is commanded `Conn_4` which connects it to the node to the left of it. Thus the data from the upper left and lower right nodes are shared.*
+
+We see above how a pair of nodes might be connected based on the scheme described (see caption). Each node goes in sequence through connections as described in the PassThroughDes register. Each time a connection is made, the node adds the effect of the connected node to the T<sub>next</sub> register, which is possible since the computation is linear by defintion. 
+
+![Node timnig diagram as the PassThroughDes register is iterated through.](Media/nodeTiming.png)
+
+*Node timing diagram as the PassThroughDes register is iterated through. At the end, the cycle repeats and the T<sub>next</sub> becomes T<sub>curr</sub>*
+
+
+
