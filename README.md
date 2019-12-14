@@ -93,5 +93,13 @@ We see above how a pair of nodes might be connected based on the scheme describe
 
 *Node timing diagram as the PassThroughDes register is iterated through. At the end, the cycle repeats and the T<sub>next</sub> becomes T<sub>curr</sub>*
 
+With this scheme, we can project all of the nodes from a 3d mesh onto our 2d grid, and then simulate their connections as described above. The advantage of this scheme is that we can achieve all of this in compile time, and the hardware doesn't need to be re-synthesized (or require a new ASIC to be made). 
+
+![Compile time mesh projection.](Media/meshMapping.png)
+
+
+## Next Steps
+
+Right now, each synthesized piece of hardware can solve a single type of differential equation. We'd like to generalize this so that any differential equation which uses a node-edge model for simulation can be run. In order to do this, we'd like to make the nodes into more general computing platforms, in that they will be able to perform a series of instructions which can also be described at compile time. We'd also like to implement the connection scheme described above and compile some 3D mesh to it and test the simulation. Since this is planned to be a speciallized hardware accelerator, then we'd like to design a system to connect with a CPU as well. 
 
 
