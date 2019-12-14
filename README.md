@@ -43,3 +43,16 @@ Unfortunately, one problem with this architecture is that it does not scale well
 
 Since most siliocn processes are two dimensional (except for new "three dimensional" architectures which are in reality just layered planes with vias), then the best layout of nodes we can hope to achieve is a 2 dimensional grid. The question then becomes how we connect the nodes togeather in order to simulate any arbitrary 1, 2 or 3 dimensional mesh. There are many architectures to consider, most of which have serious scaling problems. For example, we might connect every node to every other node (a complete graph), and signal in a register which ones they're connected to. Unfortunately, this scales poorly as a 12 node network has 66 connections. Another way we could connect nodes is similar to the connection fabric of an FPGA. This typically involves connecting "blocks" by using separate router blocks permanently per upload. Unfortunately, we may need to connect a node to more than 4 other nodes, so this becomes a problem since each block can be connected to at most the 4 locations. 
 
+![FPGA Connection Fabric](Media/fpgaFabric.jpg)
+
+*Connection fabric of an FPGA. Credit [Clive Maxfield](https://www.embedded.com/the-mcu-guys-introduction-to-fpgas-the-hardware/)*
+
+For the purpose FPGA's are designe for, this limitation is not an issue. There isn't a particular dimensionality to most logic described by verilog, and no particular preferance for one connection method over another. Now that we see some of the issues, we will describe our solution to these problems. 
+
+We will assume that for most 3D meshes, which are the highest dimensional mesh we need to account for, the maximum vertex degree is relatively  low, i.e. maybe 10 or 12. We will also assume that the maximum degree of a vertex can also be lowered by mesh optimization processes. With this in mind, we propose a grid of nodes where each node can either be a wire (pass a signal through) or be a connection. By allowing for several time steps to progress in this manner, each node can connect to an arbitrary number of nodes by having it's connection routed through other nodes if necessary. Here is a truncated depiction of the connection network:
+
+![Proposed Connection Fabric](Media/nodeConnectionBlank.png)
+
+*Proposed connection fabric, which each node connected to the four surrounding nodes.*
+
+Additional registers are now needed for this new architecture. Notice that there is a T<sub>next</sub>, PassThroughDes, P<sub>y</sub>, and P<sub>z</sub>. The P<sub>y</sub> and P<sub>z</sub> are there to extend the problem to three dimensions. The T<sub>next</sub> is necessary since each time step will now take multiple clock cycles, and since the next value of each node depends on the current value of the node and surrounding nodes, then the next value needs to be stored indepenently of the current value. 
