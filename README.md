@@ -17,6 +17,13 @@ FEA generally operates on a mesh of the part. A mesh is typically generated from
 In order to emulate this technique in hardware, our architecture is based on a series of nodes as well which perform these computations. Each node is capable of connecting to other nodes through a technique we will describe later, and thus simulate any mesh connection. 
 
 We will be starting with solving the 1 dimensional heat equation. The heat equation is a partial differential equation defined by:
+
 ![Heat Equation 1 Dimensional](Media/heatEqn1D.png)
 
-The nodes contain registers which model the node's internal temperature and current position. Each node is connected to nodes to the left and right of itself (since there is one dimension) except for the two end point nodes. 
+In order to approximate a solution to this equation, we need to discretize it. This entails taking the linear terms of the Taylor series around T[t,j]. The discretization is the following:
+
+![Discrete Heat Equation 1 Dimensional](Media/discreteHeatEqn1D.png)
+
+Note that each T[t,j] relies on the nodes to the left, T[t,j-1], and right, T[t,j+1], as well as the node value itself. Our nodes implemented in hardware contain registers which model the node's internal temperature and current position. Each node is connected to nodes to the left and right of itself (since there is one dimension) except for the two end point nodes. The nodes share positions as well as their internal values, which allows each to calculate *dx* as well as the change in temperature. 
+
+![Node Architecture](Media/nodesLinear.png)
