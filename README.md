@@ -16,6 +16,8 @@ FEA generally operates on a mesh of the part. A mesh is typically generated from
 
 In order to emulate this technique in hardware, our architecture is based on a series of nodes as well which perform these computations. Each node is capable of connecting to other nodes through a technique we will describe later, and thus simulate any mesh connection. 
 
+### 1 Dimensional Architecture
+
 We will be starting with solving the 1 dimensional heat equation. The heat equation is a partial differential equation defined by:
 
 ![Heat Equation 1 Dimensional](Media/heatEqn1D.png)
@@ -24,6 +26,13 @@ In order to approximate a solution to this equation, we need to discretize it. T
 
 ![Discrete Heat Equation 1 Dimensional](Media/discreteHeatEqn1D.png)
 
+
 Note that each T[t,j] relies on the nodes to the left, T[t,j-1], and right, T[t,j+1], as well as the node value itself. Our nodes implemented in hardware contain registers which model the node's internal temperature and current position. Each node is connected to nodes to the left and right of itself (since there is one dimension) except for the two end point nodes. The nodes share positions as well as their internal values, which allows each to calculate *dx* as well as the change in temperature. 
 
 ![Node Architecture](Media/nodesLinear.png)
+
+*The layout of our 1 dimensional nodes, connected togeather sharing information between them.*
+
+We were able to successfuly simulate the 1 dimensional heat equation in verilog using this architecture. To compile, run and plot the simulation simply run `nodes_sol.sh` from the `/Nodes` directory. This should produce an animation similar to the following:
+
+![Example Simulation of the 1 Dimensional Heat Equation Using Verilog](Media/exampleSim.gif)
