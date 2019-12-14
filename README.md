@@ -24,4 +24,6 @@ In order to approximate a solution to this equation, we need to discretize it. T
 
 ![Discrete Heat Equation 1 Dimensional](Media/discreteHeatEqn1D.png)
 
-The nodes contain registers which model the node's internal temperature and current position. Each node is connected to nodes to the left and right of itself (since there is one dimension) except for the two end point nodes. 
+Note that each T[t,j] relies on the nodes to the left, T[t,j-1], and right, T[t,j+1], as well as the node value itself. Our nodes implemented in hardware contain registers which model the node's internal temperature and current position. Each node is connected to nodes to the left and right of itself (since there is one dimension) except for the two end point nodes. The nodes share positions as well as their internal values, which allows each to calculate *dx* as well as the change in temperature. 
+
+![Node Architecture](Media/nodesLinear.png)
