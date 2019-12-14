@@ -8,4 +8,15 @@ Our goal is to perform analysis on a part in a few hundred or thousand clock cyc
 
 ## Architectural Description
 
-FEA generally operates on a mesh of the part. This mesh can be one, two or three dimensional depending on the type of problem being analyzed. A mesh consists of a series of nodes with edges in between them designating connections to other nodes. Most algorithms comprise of applying some function on each node which is dependent on the values of the surrounding nodes and it's own value. In order to model this, our architecture is based on a series of nodes as well which perform these computations. Each node is capable of connecting to other nodes, and thus simulating any mesh connection. The nodes contain registers which model external 
+![Mesh](Media/meshExample.png)
+
+*An example of a 3 dimensional mesh at various resolutions. Note that the mesh consists of nodes (the dots) connected by edges (the lines).*
+
+FEA generally operates on a mesh of the part. A mesh is typically generated from a more precise description of part in order to make a discrete approximation so that analysis on a large but *finite* number of elements can be performed (hence the name Finite Element Analysis). This mesh can be one, two or three dimensional depending on the type of problem being analyzed. A mesh consists of a series of nodes with edges in between them designating connections to other nodes. Most algorithms comprise of applying some function on each node which is dependent on the values of the surrounding nodes (nodes which are connected by edges) and it's own value, and maybe some number of derivatives (i.e. the change in surrounding nodes values, or change in it's own value). These functions are typically very simple and linear, meaning they approximate the solution to a differential equation in a similar way to Eulers's method, using many linear approximations with small time steps.
+
+In order to emulate this technique in hardware, our architecture is based on a series of nodes as well which perform these computations. Each node is capable of connecting to other nodes through a technique we will describe later, and thus simulate any mesh connection. 
+
+We will be starting with solving the 1 dimensional heat equation. The heat equation is a partial differential equation defined by:
+![Heat Equation 1 Dimensional](Media/heatEqn1D.png)
+
+The nodes contain registers which model the node's internal temperature and current position. Each node is connected to nodes to the left and right of itself (since there is one dimension) except for the two end point nodes. 
